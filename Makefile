@@ -1,0 +1,2 @@
+test:
+	pytest -sv ./tests/ 
