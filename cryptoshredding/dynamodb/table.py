@@ -19,13 +19,19 @@ class CryptoTable(object):
     def put_item(self, key_id: str, **kwargs):
         materials_provider = self._create_materials_provider(key_id=key_id)
         encrypted_table = EncryptedTable(
-            table=self._table, materials_provider=materials_provider, attribute_actions=self._attribute_actions)
+            table=self._table,
+            materials_provider=materials_provider,
+            attribute_actions=self._attribute_actions,
+        )
         encrypted_table.put_item(**kwargs)
 
     def get_item(self, key_id: str, **kwargs):
         materials_provider = self._create_materials_provider(key_id=key_id)
         encrypted_table = EncryptedTable(
-            table=self._table, materials_provider=materials_provider, attribute_actions=self._attribute_actions)
+            table=self._table,
+            materials_provider=materials_provider,
+            attribute_actions=self._attribute_actions,
+        )
         return encrypted_table.get_item(**kwargs)
 
     def _create_materials_provider(self, key_id: str):
@@ -44,7 +50,9 @@ class CryptoTable(object):
             key_encoding=KeyEncodingType.RAW,
         )
         wrapped_cmp = WrappedCryptographicMaterialsProvider(
-            wrapping_key=wrapping_key, unwrapping_key=wrapping_key, signing_key=signing_key
+            wrapping_key=wrapping_key,
+            unwrapping_key=wrapping_key,
+            signing_key=signing_key,
         )
 
         return wrapped_cmp

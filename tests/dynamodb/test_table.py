@@ -8,6 +8,7 @@ from .. import create_in_memory_key_store
 
 table_name = "dummy"
 
+
 @mock_dynamodb2
 def test_put_item():
     dynamodb = boto3.resource("dynamodb")
@@ -52,22 +53,22 @@ def test_put_item():
     plaintext_item.update(index_key)
 
     actions = AttributeActions(
-        default_action=CryptoAction.ENCRYPT_AND_SIGN, attribute_actions={
-            "ignore": CryptoAction.DO_NOTHING}
+        default_action=CryptoAction.ENCRYPT_AND_SIGN,
+        attribute_actions={
+            "ignore": CryptoAction.DO_NOTHING,
+        }
     )
 
     crypto_table = CryptoTable(
         table=table, key_store=key_store, attribute_actions=actions)
     crypto_table.put_item(key_id=key_id, Item=plaintext_item)
-    
+
     encrypted_item = table.get_item(Key=index_key)["Item"]
     decrypted_item = crypto_table.get_item(key_id=key_id, Key=index_key)["Item"]
 
     for name in encrypted_attributes:
         assert encrypted_item[name] != plaintext_item[name]
         assert decrypted_item[name] == plaintext_item[name]
-    
+
     for name in unencrypted_attributes:
         assert decrypted_item[name] == encrypted_item[name] == plaintext_item[name]
-    
-

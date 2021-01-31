@@ -6,6 +6,7 @@ from dynamodb_encryption_sdk.identifiers import EncryptionKeyType, KeyEncodingTy
 
 from cryptoshredding.in_memory_key_store import InMemoryKeyStore
 
+
 def create_in_memory_key_store():
     key_bytes = os.urandom(32)
 
@@ -22,7 +23,9 @@ def create_in_memory_key_store():
         key_encoding=KeyEncodingType.RAW,
     )
     wrapped_cmp = WrappedCryptographicMaterialsProvider(
-        wrapping_key=wrapping_key, unwrapping_key=wrapping_key, signing_key=signing_key
+        wrapping_key=wrapping_key,
+        unwrapping_key=wrapping_key,
+        signing_key=signing_key,
     )
 
     key_store = InMemoryKeyStore(materials_provider=wrapped_cmp)

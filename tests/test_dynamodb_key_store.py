@@ -50,7 +50,9 @@ def test_key_generation():
         key_encoding=KeyEncodingType.RAW,
     )
     wrapped_cmp = WrappedCryptographicMaterialsProvider(
-        wrapping_key=wrapping_key, unwrapping_key=wrapping_key, signing_key=signing_key
+        wrapping_key=wrapping_key,
+        unwrapping_key=wrapping_key,
+        signing_key=signing_key,
     )
 
     key_store = DynamodbKeyStore(table=table, materials_provider=wrapped_cmp)
