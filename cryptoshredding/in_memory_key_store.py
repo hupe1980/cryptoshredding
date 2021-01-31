@@ -1,6 +1,7 @@
 from .key_store import KeyStore
 cache = {}
 
+
 class InMemoryKeyStore(KeyStore):
     def _get_item(self, key_id: str):
         return cache[key_id]

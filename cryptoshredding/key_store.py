@@ -7,8 +7,10 @@ from dynamodb_encryption_sdk.encrypted import CryptoConfig
 from dynamodb_encryption_sdk.encrypted.item import decrypt_python_item, encrypt_python_item
 from dynamodb_encryption_sdk.transform import dict_to_ddb
 
+
 def key_generator() -> bytes:
     return os.urandom(32)
+
 
 class KeyStore(ABC):
     @abstractmethod
@@ -52,9 +54,10 @@ class KeyStore(ABC):
             attributes=dict_to_ddb(index_key),
         )
         crypto_config = CryptoConfig(
-            materials_provider=self._materials_provider, encryption_context=encryption_context, attribute_actions=self._actions
+            materials_provider=self._materials_provider,
+            encryption_context=encryption_context,
+            attribute_actions=self._actions
         )
-        
         encrypted_item = encrypt_python_item(plaintext_item, crypto_config)
 
         self._put_item(key_id=key_id, encrypted_item=encrypted_item)
@@ -63,7 +66,7 @@ class KeyStore(ABC):
 
     def get_key(self, key_id: str) -> bytes:
         index_key = {"key_id": key_id}
-        
+
         encryption_context = EncryptionContext(
             table_name=self._table_name,
             partition_key_name="key_id",
@@ -74,17 +77,17 @@ class KeyStore(ABC):
         )
 
         encrypted_item = self._get_item(key_id=key_id)
-        decrypted_item = decrypt_python_item(encrypted_item, crypto_config)
 
-        if decrypted_item["restricted"]:
-            raise Error("Access restricted.")
+        if encrypted_item["restricted"]:
+            raise Exception("Access restricted.")
+
+        decrypted_item = decrypt_python_item(encrypted_item, crypto_config)
 
         return decrypted_item["key"].value
 
     def delete_key(self, key_id: str, allow_recovering=False) -> None:
-        if decrypted_item["on_hold"]:
-            raise Error("Deletion currently not possible.")
+        encrypted_item = self._get_item(key_id=key_id)
+        if encrypted_item["on_hold"]:
+            raise Exception("Deletion currently not possible.")
 
         self._delete_item(key_id=key_id)
-
-
