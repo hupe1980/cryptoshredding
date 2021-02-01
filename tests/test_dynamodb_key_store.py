@@ -13,7 +13,7 @@ table_name = "dummy_table"
 
 @mock_dynamodb2
 def test_key_generation():
-    dynamodb = boto3.resource("dynamodb")
+    dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
 
     table = dynamodb.create_table(
         TableName=table_name,

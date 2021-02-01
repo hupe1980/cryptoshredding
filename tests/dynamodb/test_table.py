@@ -11,7 +11,7 @@ table_name = "dummy"
 
 @mock_dynamodb2
 def test_get_item():
-    dynamodb = boto3.resource("dynamodb")
+    dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
 
     table = dynamodb.create_table(
         TableName=table_name,
