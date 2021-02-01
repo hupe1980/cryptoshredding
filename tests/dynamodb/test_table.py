@@ -10,7 +10,7 @@ table_name = "dummy"
 
 
 @mock_dynamodb2
-def test_put_item():
+def test_get_item():
     dynamodb = boto3.resource("dynamodb")
 
     table = dynamodb.create_table(
@@ -37,7 +37,7 @@ def test_put_item():
     key_id = "foo"
     key_store = create_in_memory_key_store()
     key_store.create_key(key_id=key_id)
-    
+
     index_key = {"id": "bar"}
     plaintext_item = {
         "example": "data",
@@ -60,7 +60,10 @@ def test_put_item():
     )
 
     crypto_table = CryptoTable(
-        table=table, key_store=key_store, attribute_actions=actions)
+        table=table,
+        key_store=key_store,
+        attribute_actions=actions,
+    )
     crypto_table.put_item(key_id=key_id, Item=plaintext_item)
 
     encrypted_item = table.get_item(Key=index_key)["Item"]
