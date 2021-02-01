@@ -7,6 +7,7 @@ ROOT = os.path.dirname(__file__)
 VERSION_RE = re.compile(r'''__version__ = ['"]([0-9.]+)['"]''')
 
 requires = [
+    'aws-encryption-sdk>=2.0.0',
     'boto3>=1.16.63',
     'dynamodb-encryption-sdk>=1.2.0',
 ]

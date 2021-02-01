@@ -64,7 +64,7 @@ def test_put_item():
     crypto_table.put_item(key_id=key_id, Item=plaintext_item)
 
     encrypted_item = table.get_item(Key=index_key)["Item"]
-    decrypted_item = crypto_table.get_item(key_id=key_id, Key=index_key)["Item"]
+    decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
 
     for name in encrypted_attributes:
         assert encrypted_item[name] != plaintext_item[name]

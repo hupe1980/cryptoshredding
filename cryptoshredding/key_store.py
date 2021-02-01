@@ -87,6 +87,7 @@ class KeyStore(ABC):
 
     def delete_key(self, key_id: str, allow_recovering=False) -> None:
         encrypted_item = self._get_item(key_id=key_id)
+
         if encrypted_item["on_hold"]:
             raise Exception("Deletion currently not possible.")
 
