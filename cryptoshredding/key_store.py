@@ -73,7 +73,9 @@ class KeyStore(ABC):
             attributes=dict_to_ddb(index_key),
         )
         crypto_config = CryptoConfig(
-            materials_provider=self._materials_provider, encryption_context=encryption_context, attribute_actions=self._actions
+            materials_provider=self._materials_provider,
+            encryption_context=encryption_context,
+            attribute_actions=self._actions,
         )
 
         encrypted_item = self._get_item(key_id=key_id)

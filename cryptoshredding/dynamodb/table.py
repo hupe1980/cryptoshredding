@@ -36,3 +36,25 @@ class CryptoTable(object):
             attribute_actions=self._attribute_actions,
         )
         return encrypted_table.get_item(**kwargs)
+
+    def query(self, **kwargs):
+        materials_provider = KeyStoreMaterialsProvider(
+            key_store=self._key_store,
+        )
+        encrypted_table = EncryptedTable(
+            table=self._table,
+            materials_provider=materials_provider,
+            attribute_actions=self._attribute_actions,
+        )
+        return encrypted_table.query(**kwargs)
+
+    def scan(self, **kwargs):
+        materials_provider = KeyStoreMaterialsProvider(
+            key_store=self._key_store,
+        )
+        encrypted_table = EncryptedTable(
+            table=self._table,
+            materials_provider=materials_provider,
+            attribute_actions=self._attribute_actions,
+        )
+        return encrypted_table.scan(**kwargs)

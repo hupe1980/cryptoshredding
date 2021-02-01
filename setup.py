@@ -32,7 +32,7 @@ setup(
     license="MIT",
     python_requires=">= 3.6",
     classifiers=[
-        'Development Status:: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: MIT License',
