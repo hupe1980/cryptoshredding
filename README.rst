@@ -34,8 +34,27 @@ Usage
 Central KeyStore
 ================
 
-Dynamodb - CryptoTable
-======================
+.. code-block:: python
+
+    >>> import boto3
+    >>> from cryptoshredding import DynamodbKeyStore
+    >>> from dynamodb_encryption_sdk.material_providers.aws_kms import AwsKmsCryptographicMaterialsProvider
+    >>>
+    >>> aws_cmk_id = "arn:aws:kms:YOUR_KEY"
+    >>> aws_kms_cmp = AwsKmsCryptographicMaterialsProvider(key_id=aws_cmk_id)
+    >>>
+    >>> table = boto3.resource("dynamodb").Table("key_store_table") 
+    >>>
+    >>> key_store = DynamodbKeyStore(table=table, materials_provider=aws_kms_cmp)
+    >>>
+    >>> key_store.create_key(key_id="foo")
+    >>>
+    >>> key_store.get_key(key_id="foo")
+    >>>
+    >>> key_store.delete_key(key_id="foo")
+
+Dynamodb CryptoTable
+====================
 
 .. _cryptography: https://cryptography.io/en/latest/
 .. _cryptography installation guide: https://cryptography.io/en/latest/installation.html
