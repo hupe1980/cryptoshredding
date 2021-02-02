@@ -26,3 +26,16 @@ Installation
    .. code::
 
        $ pip install cryptoshredding
+
+*****
+Usage
+*****
+
+Central KeyStore
+================
+
+Dynamodb - CryptoTable
+======================
+
+.. _cryptography: https://cryptography.io/en/latest/
+.. _cryptography installation guide: https://cryptography.io/en/latest/installation.html
