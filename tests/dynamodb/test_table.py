@@ -4,7 +4,7 @@ from moto import mock_dynamodb2
 from dynamodb_encryption_sdk.identifiers import CryptoAction
 from dynamodb_encryption_sdk.structures import AttributeActions
 
-from cryptoshredding.dynamodb.table import CryptoTable
+from cryptoshredding.dynamodb import CryptoTable
 from .. import create_in_memory_key_store
 
 
