@@ -38,7 +38,6 @@ class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
             key_type=EncryptionKeyType.SYMMETRIC,
             key_encoding=KeyEncodingType.RAW,
         )
-
         return WrappedCryptographicMaterials(
             wrapping_key=wrapping_key,
             unwrapping_key=wrapping_key,

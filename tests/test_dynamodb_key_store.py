@@ -6,9 +6,7 @@ from dynamodb_encryption_sdk.delegated_keys.jce import JceNameLocalDelegatedKey
 from dynamodb_encryption_sdk.material_providers.wrapped import WrappedCryptographicMaterialsProvider
 from dynamodb_encryption_sdk.identifiers import EncryptionKeyType, KeyEncodingType
 
-from cryptoshredding.dynamodb_key_store import DynamodbKeyStore
-
-table_name = "dummy_table"
+from cryptoshredding import DynamodbKeyStore
 
 
 @mock_dynamodb2
@@ -16,7 +14,7 @@ def test_key_generation():
     dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
 
     table = dynamodb.create_table(
-        TableName=table_name,
+        TableName="dummy_table",
         KeySchema=[
             {
                 'AttributeName': 'key_id',

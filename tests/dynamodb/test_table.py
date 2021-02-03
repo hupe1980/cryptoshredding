@@ -83,6 +83,11 @@ def test_get_item(table):
     for name in unencrypted_attributes:
         assert decrypted_item[name] == encrypted_item[name] == plaintext_item[name]
 
+    key_store.delete_key(key_id=key_id)
+
+    with pytest.raises(Exception):
+        decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
+
 
 def test_scan(table):
     key_id = "key"
@@ -129,3 +134,15 @@ def test_scan(table):
 
     for name in unencrypted_attributes:
         assert decrypted_items[0][name] == encrypted_items[0][name] == plaintext_item[name]
+
+    # shredding
+    key_store.delete_key(key_id=key_id)
+
+    encrypted = table.scan()
+    decrypted = crypto_table.scan()
+
+    assert encrypted["Count"] == 1
+    assert len(encrypted["Items"]) == 1
+
+    assert decrypted["Count"] == 0
+    assert len(decrypted["Items"]) == 0

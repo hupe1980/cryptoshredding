@@ -31,8 +31,8 @@ Installation
 Usage
 *****
 
-Central KeyStore
-================
+KeyStore
+========
 
 .. code-block:: python
 
@@ -53,8 +53,8 @@ Central KeyStore
     >>>
     >>> key_store.delete_key(key_id="foo")
 
-Dynamodb CryptoTable
-====================
+Dynamodb
+========
 
 .. _cryptography: https://cryptography.io/en/latest/
 .. _cryptography installation guide: https://cryptography.io/en/latest/installation.html
