@@ -47,11 +47,11 @@ KeyStore
     >>>
     >>> key_store = DynamodbKeyStore(table=table, materials_provider=aws_kms_cmp)
     >>>
-    >>> key_store.create_key(key_id="foo")
+    >>> key_store.create_key("foo")
     >>>
-    >>> key_store.get_key(key_id="foo")
+    >>> key_store.get_key("foo")
     >>>
-    >>> key_store.delete_key(key_id="foo")
+    >>> key_store.delete_key("foo")
 
 Dynamodb
 ========

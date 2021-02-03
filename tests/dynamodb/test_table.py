@@ -43,7 +43,7 @@ def table(dynamodb):
 def test_get_item(table):
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id=key_id)
+    key_store.create_key(key_id)
 
     index_key = {"id": "foo"}
     plaintext_item = {
@@ -92,7 +92,7 @@ def test_get_item(table):
 def test_scan(table):
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id=key_id)
+    key_store.create_key(key_id)
 
     index_key = {"id": "foo"}
     plaintext_item = {

@@ -1,11 +1,16 @@
 from dynamodb_encryption_sdk.encrypted import CryptoConfig
-from dynamodb_encryption_sdk.encrypted.item import decrypt_python_item, encrypt_python_item
+from dynamodb_encryption_sdk.encrypted.item import (
+    decrypt_dynamodb_item as aws_decrypt_dynamodb_item,
+    encrypt_dynamodb_item as aws_encrypt_dynamodb_item,
+)
+from dynamodb_encryption_sdk.transform import ddb_to_dict, dict_to_ddb
+
 
 from ..key_store import KeyStore
 from .materials_provider import KeyStoreMaterialsProvider
 
 
-def encrypt_item(item, key_id: str, key_store: KeyStore, encryption_context, attribute_actions):
+def encrypt_dynamodb_item(item, key_id: str, key_store: KeyStore, encryption_context, attribute_actions):
     materials_provider = KeyStoreMaterialsProvider(
         key_store=key_store,
         material_description={"key_id": key_id},
@@ -15,10 +20,22 @@ def encrypt_item(item, key_id: str, key_store: KeyStore, encryption_context, att
         encryption_context=encryption_context,
         attribute_actions=attribute_actions,
     )
-    return encrypt_python_item(item, crypto_config)
+    return aws_encrypt_dynamodb_item(item, crypto_config)
 
 
-def decrypt_item(item, key_store: KeyStore, encryption_context, attribute_actions):
+def encrypt_python_item(item, key_id: str, key_store: KeyStore, encryption_context, attribute_actions):
+    ddb_item = dict_to_ddb(item)
+    encrypted_ddb_item = encrypt_dynamodb_item(
+        item=ddb_item,
+        key_id=key_id,
+        key_store=key_store,
+        encryption_context=encryption_context,
+        attribute_actions=attribute_actions,
+    )
+    return ddb_to_dict(encrypted_ddb_item)
+
+
+def decrypt_dynamodb_item(item, key_store: KeyStore, encryption_context, attribute_actions):
     materials_provider = KeyStoreMaterialsProvider(
         key_store=key_store,
     )
@@ -27,4 +44,15 @@ def decrypt_item(item, key_store: KeyStore, encryption_context, attribute_action
         encryption_context=encryption_context,
         attribute_actions=attribute_actions,
     )
-    return decrypt_python_item(item, crypto_config)
+    return aws_decrypt_dynamodb_item(item, crypto_config)
+
+
+def decrypt_python_item(item, key_store: KeyStore, encryption_context, attribute_actions):
+    ddb_item = dict_to_ddb(item)
+    decrypted_ddb_item = decrypt_dynamodb_item(
+        item=ddb_item, 
+        key_store=key_store,
+        encryption_context=encryption_context,
+        attribute_actions=attribute_actions,
+    )
+    return ddb_to_dict(decrypted_ddb_item)
