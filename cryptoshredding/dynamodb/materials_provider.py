@@ -1,3 +1,4 @@
+from typing import Dict, Optional, Text
 from dynamodb_encryption_sdk.delegated_keys.jce import JceNameLocalDelegatedKey
 from dynamodb_encryption_sdk.materials.wrapped import WrappedCryptographicMaterials
 from dynamodb_encryption_sdk.identifiers import EncryptionKeyType, KeyEncodingType
@@ -8,14 +9,21 @@ from ..key_store import KeyStore
 
 
 class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
-    def __init__(self, key_store: KeyStore, material_description=None):
+    def __init__(
+        self,
+        key_store: KeyStore,
+        material_description: Optional[Dict[Text, Text]] = None,
+    ) -> None:
         if material_description is None:
             material_description = {}
 
         self._key_store = key_store
         self._material_description = material_description
 
-    def _build_materials(self, encryption_context: EncryptionContext) -> WrappedCryptographicMaterials:
+    def _build_materials(
+        self,
+        encryption_context: EncryptionContext,
+    ) -> WrappedCryptographicMaterials:
         """Construct
         :param EncryptionContext encryption_context: Encryption context for request
         :returns: Wrapped cryptographic materials
@@ -45,7 +53,10 @@ class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
             material_description=material_description,
         )
 
-    def encryption_materials(self, encryption_context: EncryptionContext) -> WrappedCryptographicMaterials:
+    def encryption_materials(
+        self,
+        encryption_context: EncryptionContext
+    ) -> WrappedCryptographicMaterials:
         """Provide encryption materials.
         :param EncryptionContext encryption_context: Encryption context for request
         :returns: Encryption materials
@@ -53,7 +64,10 @@ class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
         """
         return self._build_materials(encryption_context)
 
-    def decryption_materials(self, encryption_context: EncryptionContext) -> WrappedCryptographicMaterials:
+    def decryption_materials(
+        self,
+        encryption_context: EncryptionContext
+    ) -> WrappedCryptographicMaterials:
         """Provide decryption materials.
         :param EncryptionContext encryption_context: Encryption context for request
         :returns: Decryption materials
