@@ -64,23 +64,17 @@ class CryptoTable(object):
         return encrypted_table.get_item(**kwargs)
 
     def query(self, **kwargs):
-        materials_provider = KeyStoreMaterialsProvider(
-            key_store=self._key_store,
-        )
-        encrypted_table = EncryptedTable(
-            table=self._table,
-            materials_provider=materials_provider,
-            table_info=self._table_info,
-            attribute_actions=self._attribute_actions,
-        )
-        return encrypted_table.query(**kwargs)
+        response = self._table.query(**kwargs)
+        return self._decrypt_dynamodb_response(response)
 
     def scan(self, **kwargs):
+        response = self._table.scan(**kwargs)
+        return self._decrypt_dynamodb_response(response)
+
+    def _decrypt_dynamodb_response(self, response):
         materials_provider = KeyStoreMaterialsProvider(
             key_store=self._key_store,
         )
-
-        response = self._table.scan(**kwargs)
 
         ec_kwargs = self._table_info.encryption_context_values
         if self._table_info.primary_index is not None:
