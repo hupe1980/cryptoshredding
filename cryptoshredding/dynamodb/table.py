@@ -1,16 +1,15 @@
 from typing import Optional
 from boto3.resources.base import ServiceResource
-from dynamodb_encryption_sdk.encrypted import CryptoConfig
 from dynamodb_encryption_sdk.structures import (
     AttributeActions,
     TableInfo,
     EncryptionContext,
 )
 from dynamodb_encryption_sdk.encrypted.table import EncryptedTable
-from dynamodb_encryption_sdk.encrypted.item import decrypt_python_item
 
 
 from ..key_store import KeyStore
+from .item import decrypt_python_item
 from .materials_provider import KeyStoreMaterialsProvider
 
 
@@ -72,10 +71,6 @@ class CryptoTable(object):
         return self._decrypt_dynamodb_response(response)
 
     def _decrypt_dynamodb_response(self, response):
-        materials_provider = KeyStoreMaterialsProvider(
-            key_store=self._key_store,
-        )
-
         ec_kwargs = self._table_info.encryption_context_values
         if self._table_info.primary_index is not None:
             ec_kwargs.update({
@@ -83,21 +78,18 @@ class CryptoTable(object):
                 "sort_key_name": self._table_info.primary_index.sort
             })
 
-        self._attribute_actions = self._attribute_actions.copy()
         self._attribute_actions.set_index_keys(*self._table_info.protected_index_keys())
 
-        crypto_config = CryptoConfig(
-            materials_provider=materials_provider,
-            encryption_context=EncryptionContext(**ec_kwargs),
-            attribute_actions=self._attribute_actions,
-        )
+        encryption_context = EncryptionContext(**ec_kwargs)
 
         def decrypt(items):
             for item in items:
                 try:
                     decrypted_item = decrypt_python_item(
                         item=item,
-                        crypto_config=crypto_config,
+                        key_store=self._key_store,
+                        encryption_context=encryption_context,
+                        attribute_actions=self._attribute_actions,
                     )
                     yield decrypted_item
                 except Exception:  # TODO

@@ -51,7 +51,7 @@ KeyStore
     >>>
     >>> key_store.get_key("foo")
     >>>
-    >>> key_store.delete_key("foo")
+    >>> key_store.delete_key("foo")  # shredding
 
 Dynamodb
 ========
@@ -66,31 +66,25 @@ Dynamodb
     >>> crypto_table = CryptoTable(
     ...    table=table,
     ...    key_store=key_store,
-    ...    attribute_actions=actions,
     ... )
     >>> crypto_table.put_item(key_id=key_id, Item=plaintext_item)
     >>>
     >>> encrypted_item = table.get_item(Key=index_key)["Item"]
     >>> decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
+    >>> 
+    >>> encrypted_items = table.scan()["Items"]
     >>> decrypted_items = crypto_table.scan()["Items"]
     >>> 
-    >>> encrypted = table.scan()
-    >>> decrypted = crypto_table.scan()
-    >>> 
-    >>> assert encrypted["Count"] == 1
-    >>> assert decrypted["Count"] == 1
-    >>> assert len(encrypted["Items"]) == 1
-    >>> assert len(decrypted["Items"]) == 1
+    >>> assert len(encrypted_items) == 1
+    >>> assert len(decrypted_items) == 1
     >>>
-    >>> key_store.delete_key(key_id=key_id)  # shredding
+    >>> key_store.delete_key(key_id)  # shredding
     >>> 
-    >>> encrypted = table.scan()
-    >>> decrypted = crypto_table.scan()
+    >>> encrypted_items = table.scan()["Items"]
+    >>> decrypted_items = crypto_table.scan()["Items"]
     >>> 
-    >>> assert encrypted["Count"] == 1
-    >>> assert decrypted["Count"] == 0
-    >>> assert len(encrypted["Items"]) == 1
-    >>> assert len(decrypted["Items"]) == 0     
+    >>> assert len(encrypted_items) == 1
+    >>> assert len(decrypted_items) == 0  # !!!   
 
 .. _cryptography: https://cryptography.io/en/latest/
 .. _cryptography installation guide: https://cryptography.io/en/latest/installation.html
