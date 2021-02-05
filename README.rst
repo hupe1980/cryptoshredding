@@ -49,7 +49,7 @@ KeyStore
     >>>
     >>> key_store.create_key("foo")
     >>>
-    >>> key_store.get_key("foo")
+    >>> key = key_store.get_key("foo")
     >>>
     >>> key_store.delete_key("foo")  # shredding
 
@@ -69,6 +69,7 @@ Dynamodb
     ... )
     >>> crypto_table.put_item(key_id=key_id, Item=plaintext_item)
     >>>
+    >>> index_key = {"id": "foo"}
     >>> encrypted_item = table.get_item(Key=index_key)["Item"]
     >>> decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
     >>> 
@@ -85,6 +86,9 @@ Dynamodb
     >>> 
     >>> assert len(encrypted_items) == 1
     >>> assert len(decrypted_items) == 0  # !!!   
+
+S3
+==
 
 .. _cryptography: https://cryptography.io/en/latest/
 .. _cryptography installation guide: https://cryptography.io/en/latest/installation.html

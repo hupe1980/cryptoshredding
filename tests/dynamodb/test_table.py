@@ -6,6 +6,7 @@ from dynamodb_encryption_sdk.identifiers import CryptoAction
 from dynamodb_encryption_sdk.structures import AttributeActions
 
 from cryptoshredding.dynamodb import CryptoTable
+
 from .. import create_in_memory_key_store
 
 
@@ -84,7 +85,7 @@ def test_get_item(table):
     for name in unencrypted_attributes:
         assert decrypted_item[name] == encrypted_item[name] == plaintext_item[name]
 
-    key_store.delete_key(key_id=key_id)
+    key_store.delete_key(key_id)
 
     with pytest.raises(Exception):
         decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
@@ -141,7 +142,7 @@ def test_query(table):
         assert decrypted_items[0][name] == encrypted_items[0][name] == plaintext_item[name]
 
     # shredding
-    key_store.delete_key(key_id=key_id)
+    key_store.delete_key(key_id)
 
     encrypted = table.query(
         KeyConditionExpression=Key("id").eq("foo")
@@ -204,7 +205,7 @@ def test_scan(table):
         assert decrypted_items[0][name] == encrypted_items[0][name] == plaintext_item[name]
 
     # shredding
-    key_store.delete_key(key_id=key_id)
+    key_store.delete_key(key_id)
 
     encrypted = table.scan()
     decrypted = crypto_table.scan()

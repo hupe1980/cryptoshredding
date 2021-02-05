@@ -99,3 +99,12 @@ class CryptoTable(object):
         response["Count"] = len(response["Items"])
 
         return response
+
+    def __getattr__(self, name):
+        """Catch any method/attribute lookups that are not defined in this class and try
+        to find them on the provided bridge object.
+        :param str name: Attribute name
+        :returns: Result of asking the provided table object for that attribute name
+        :raises AttributeError: if attribute is not found on provided bridge object
+        """
+        return getattr(self._table, name)
