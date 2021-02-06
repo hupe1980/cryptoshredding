@@ -45,7 +45,7 @@ def table(dynamodb):
 def test_get_item(table):
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id)
+    key_store.create_main_key(key_id)
 
     index_key = {"id": "foo"}
     plaintext_item = {
@@ -73,7 +73,7 @@ def test_get_item(table):
         key_store=key_store,
         attribute_actions=actions,
     )
-    crypto_table.put_item(key_id=key_id, Item=plaintext_item)
+    crypto_table.put_item(CSEKeyId=key_id, Item=plaintext_item)
 
     encrypted_item = table.get_item(Key=index_key)["Item"]
     decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
@@ -85,7 +85,7 @@ def test_get_item(table):
     for name in unencrypted_attributes:
         assert decrypted_item[name] == encrypted_item[name] == plaintext_item[name]
 
-    key_store.delete_key(key_id)
+    key_store.delete_main_key(key_id)
 
     with pytest.raises(Exception):
         decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
@@ -94,7 +94,7 @@ def test_get_item(table):
 def test_query(table):
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id)
+    key_store.create_main_key(key_id)
 
     index_key = {"id": "foo"}
     plaintext_item = {
@@ -122,7 +122,7 @@ def test_query(table):
         key_store=key_store,
         attribute_actions=actions,
     )
-    crypto_table.put_item(key_id=key_id, Item=plaintext_item)
+    crypto_table.put_item(CSEKeyId=key_id, Item=plaintext_item)
 
     encrypted_items = table.query(
         KeyConditionExpression=Key("id").eq("foo")
@@ -142,7 +142,7 @@ def test_query(table):
         assert decrypted_items[0][name] == encrypted_items[0][name] == plaintext_item[name]
 
     # shredding
-    key_store.delete_key(key_id)
+    key_store.delete_main_key(key_id)
 
     encrypted = table.query(
         KeyConditionExpression=Key("id").eq("foo")
@@ -161,7 +161,7 @@ def test_query(table):
 def test_scan(table):
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id)
+    key_store.create_main_key(key_id)
 
     index_key = {"id": "foo"}
     plaintext_item = {
@@ -189,7 +189,7 @@ def test_scan(table):
         key_store=key_store,
         attribute_actions=actions,
     )
-    crypto_table.put_item(key_id=key_id, Item=plaintext_item)
+    crypto_table.put_item(CSEKeyId=key_id, Item=plaintext_item)
 
     encrypted_items = table.scan()["Items"]
     decrypted_items = crypto_table.scan()["Items"]
@@ -205,7 +205,7 @@ def test_scan(table):
         assert decrypted_items[0][name] == encrypted_items[0][name] == plaintext_item[name]
 
     # shredding
-    key_store.delete_key(key_id)
+    key_store.delete_main_key(key_id)
 
     encrypted = table.scan()
     decrypted = crypto_table.scan()

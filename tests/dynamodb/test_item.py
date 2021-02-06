@@ -7,7 +7,7 @@ from .. import create_in_memory_key_store
 def test_decrypt_python_item():
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id)
+    key_store.create_main_key(key_id)
 
     plaintext_item = {
         "example": "data",

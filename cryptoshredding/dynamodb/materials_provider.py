@@ -32,16 +32,16 @@ class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
         material_description = self._material_description.copy()
         material_description.update(encryption_context.material_description)
 
-        key_bytes = self._key_store.get_key(material_description["key_id"])
+        main_key = self._key_store.get_main_key(material_description["key_id"])
 
         wrapping_key = JceNameLocalDelegatedKey(
-            key=key_bytes,
+            key=main_key.key_bytes,
             algorithm="AES",
             key_type=EncryptionKeyType.SYMMETRIC,
             key_encoding=KeyEncodingType.RAW,
         )
         signing_key = JceNameLocalDelegatedKey(
-            key=key_bytes,
+            key=main_key.key_bytes,
             algorithm="HmacSHA512",
             key_type=EncryptionKeyType.SYMMETRIC,
             key_encoding=KeyEncodingType.RAW,

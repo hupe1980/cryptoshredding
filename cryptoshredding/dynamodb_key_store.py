@@ -3,7 +3,10 @@ from .key_store import KeyStore
 
 class DynamodbKeyStore(KeyStore):
     def __init__(self, table, materials_provider):
-        super().__init__(table_name=table.table_name, materials_provider=materials_provider)
+        super().__init__(
+            table_name=table.table_name,
+            materials_provider=materials_provider,
+        )
         self._table = table
 
     def _get_item(self, key_id: str):

@@ -9,28 +9,24 @@ class CryptoBucket(object):
         self,
         bucket: ServiceResource,
         key_store: KeyStore,
-        nonce_size=12,
     ) -> None:
         self._bucket = bucket
         self._key_store = key_store
-        self._nonce_size = nonce_size
 
-    def put_object(self, key_id: str, Key, **kwargs):
+    def put_object(self, CSEKeyId: str, Key: str, **kwargs):
         obj = CryptoObject(
             key_store=self._key_store,
             object=self._bucket.Object(Key),
-            nonce_size=self._nonce_size,
         )
-        return obj.put(key_id=key_id, **kwargs)
+        return obj.put(CSEKeyId=CSEKeyId, **kwargs)
 
-    def Object(self, key: str):
+    def Object(self, key: str) -> CryptoObject:
         return CryptoObject(
             key_store=self._key_store,
             object=self._bucket.Object(key),
-            nonce_size=self._nonce_size,
         )
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str):
         """Catch any method/attribute lookups that are not defined in this class and try
         to find them on the provided bridge object.
         :param str name: Attribute name

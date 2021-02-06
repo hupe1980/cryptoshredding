@@ -37,10 +37,10 @@ class CryptoTable(object):
         self._table_info = table_info
         self._attribute_actions = attribute_actions
 
-    def put_item(self, key_id: str, **kwargs):
+    def put_item(self, CSEKeyId: str, **kwargs):
         materials_provider = KeyStoreMaterialsProvider(
             key_store=self._key_store,
-            material_description={"key_id": key_id},
+            material_description={"key_id": CSEKeyId},
         )
         encrypted_table = EncryptedTable(
             table=self._table,

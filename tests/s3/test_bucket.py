@@ -21,24 +21,57 @@ def bucket(s3):
     return boto3.resource("s3").Bucket(name)
 
 
-def test_put_object(bucket):
+def test_object_get(bucket):
     key_id = "key"
     key_store = create_in_memory_key_store()
-    key_store.create_key(key_id)
+    key_store.create_main_key(key_id)
 
     crypto_bucket = CryptoBucket(
         bucket=bucket,
         key_store=key_store,
     )
 
-    body = "foo bar"
+    body = "foo bar 4711"
 
     crypto_bucket.put_object(
-        key_id=key_id,
+        CSEKeyId=key_id,
         Key="object",
         Body=body,
     )
 
-    obj = crypto_bucket.Object("object").get()
+    encrypted_obj = bucket.Object("object").get()
+    decrypted_obj = crypto_bucket.Object("object").get()
 
-    assert body == obj["Body"].read().decode("utf8")
+    assert body != encrypted_obj["Body"].read().decode("utf8")
+    assert body == decrypted_obj["Body"].read().decode("utf8")
+
+
+def test_data_key(bucket):
+    key_id = "key"
+    key_store = create_in_memory_key_store()
+    key_store.create_main_key(key_id)
+
+    crypto_bucket = CryptoBucket(
+        bucket=bucket,
+        key_store=key_store,
+    )
+
+    body = "foo bar 4711"
+
+    crypto_bucket.put_object(
+        CSEKeyId=key_id,
+        Key="object1",
+        Body=body,
+    )
+
+    crypto_bucket.put_object(
+        CSEKeyId=key_id,
+        Key="object2",
+        Body=body,
+    )
+
+    decrypted_obj1 = crypto_bucket.Object("object1").get()
+    decrypted_obj2 = crypto_bucket.Object("object2").get()
+
+    assert decrypted_obj1["Metadata"]["x-amz-key-v2"] != decrypted_obj2["Metadata"]["x-amz-key-v2"]
+    assert decrypted_obj1["Metadata"]["x-amz-iv"] != decrypted_obj2["Metadata"]["x-amz-iv"]

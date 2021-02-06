@@ -11,19 +11,16 @@ class CryptoS3(object):
         self,
         client: BaseClient,
         key_store: KeyStore,
-        nonce_size=12,
     ) -> None:
         self._client = client
         self._key_store = key_store
-        self._nonce_size = nonce_size
 
-    def put_object(self, key_id: str, Bucket: str, Key: str, **kwargs):
+    def put_object(self, CSEKeyId: str, Bucket: str, Key: str, **kwargs):
         obj = CryptoObject(
             key_store=self._key_store,
             object=boto3.resource('s3').Object(Bucket, Key),
-            nonce_size=self._nonce_size,
         )
-        return obj.put(key_id=key_id, **kwargs)
+        return obj.put(CSEKeyId=CSEKeyId, **kwargs)
 
     def get_object(self, **kwargs):
         obj = self._client.get_object(**kwargs)
@@ -33,10 +30,9 @@ class CryptoS3(object):
             stream_body=obj["Body"],
             metadata=obj["Metadata"],
         )
-
         return obj
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str):
         """Catch any method/attribute lookups that are not defined in this class and try
         to find them on the provided bridge object.
         :param str name: Attribute name
