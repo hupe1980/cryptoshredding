@@ -17,7 +17,7 @@ def test_string(key_store):
     source = "foo bar"
 
     crypto_string = CryptoString(
-        key_store=key_store
+        key_store=key_store,
     )
 
     cypher_text, encrypted_header = crypto_string.encrypt(

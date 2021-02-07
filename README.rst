@@ -136,5 +136,43 @@ S3
     ...    Key="object",
     ... ) 
 
+File
+====
+
+.. code-block:: python
+
+    >>> from cryptoshredding.raw import CryptoFile
+    >>> 
+    >>> crypto_file = CryptoFile(
+    ...    key_store=key_store,
+    ... )
+    >>> crypto_file.encrypt(
+    ...    key_id=key_id,
+    ...    plaintext_filename="plain.txt",
+    ...    ciphertext_filename="cipher.txt"
+    ... )
+    >>> crypto_file.decrypt(
+    ...    ciphertext_filename="cipher.txt",
+    ...    plaintext_filename="decrypt.txt",
+    ... )
+
+String
+======
+
+.. code-block:: python
+
+    >>> from cryptoshredding.raw import CryptoString
+    >>> 
+    >>> crypto_string = CryptoFile(
+    ...    key_store=key_store,
+    ... )
+    >>> encrypted_text, encrypted_header = crypto_string.encrypt(
+    ...    key_id=key_id,
+    ...    source=plain_text,
+    ... )
+    >>> decrypted_text, decrypted_header = crypto_string.decrypt(
+    ...    source=encrypted_text,
+    ... )
+
 .. _cryptography: https://cryptography.io/en/latest/
 .. _cryptography installation guide: https://cryptography.io/en/latest/installation.html

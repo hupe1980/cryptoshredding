@@ -1,4 +1,5 @@
 attrs==20.3.0
+autopep8==1.5.5
 aws-encryption-sdk==2.0.0
 aws-sam-translator==1.34.0
 aws-xray-sdk==2.6.0
@@ -38,6 +39,7 @@ py==1.10.0
 pyasn1==0.4.8
 pycodestyle==2.6.0
 pycparser==2.20
+pyfakefs==4.3.3
 pyflakes==2.2.0
 pyparsing==2.4.7
 pyrsistent==0.17.3
