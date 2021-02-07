@@ -84,7 +84,10 @@ Dynamodb
     ...    table=table,
     ...    key_store=key_store,
     ... )
-    >>> crypto_table.put_item(CSEKeyId=key_id, Item=plaintext_item)
+    >>> crypto_table.put_item(
+    ...    CSEKeyId=key_id,
+    ...    Item=plaintext_item
+    ... )
     >>>
     >>> index_key = {"id": "foo"}
     >>> encrypted_item = table.get_item(Key=index_key)["Item"]

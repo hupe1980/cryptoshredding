@@ -1,0 +1,2 @@
+class CryptoFile(object):
+    pass
