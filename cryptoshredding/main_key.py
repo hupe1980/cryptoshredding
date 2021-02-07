@@ -7,7 +7,7 @@ class MainKey(object):
         self._key_id = key_id
         self._key_bytes = key_bytes
 
-    def generate_data_key(self) -> tuple[bytes, bytes]:
+    def generate_data_key(self):  # -> tuple[bytes, bytes]:
         data_key = os.urandom(32)
         encrypted_data_key = aes_key_wrap(
             wrapping_key=self._key_bytes,
