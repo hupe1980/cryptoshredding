@@ -14,7 +14,6 @@ def main_key():
 
 def test_generate_data_key(main_key):
     data_key, encrypted_data_key = main_key.generate_data_key()
-
     decrypted_data_key = main_key.decrypt(encrypted_data_key)
 
     assert data_key != encrypted_data_key

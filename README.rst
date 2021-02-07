@@ -163,7 +163,7 @@ String
 
     >>> from cryptoshredding.raw import CryptoString
     >>> 
-    >>> crypto_string = CryptoFile(
+    >>> crypto_string = CryptoString(
     ...    key_store=key_store,
     ... )
     >>> encrypted_text, encrypted_header = crypto_string.encrypt(
