@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   push:
@@ -31,4 +31,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade -r ci-requirements.txt
       - name: run test
-          run: tox -- -vv
+        run: tox -- -vv
