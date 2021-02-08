@@ -16,22 +16,12 @@ def test_key_generation():
     table = dynamodb.create_table(
         TableName="dummy_table",
         KeySchema=[
-            {
-                'AttributeName': 'key_id',
-                'KeyType': 'HASH'
-            },
+            {"AttributeName": "key_id", "KeyType": "HASH"},
         ],
         AttributeDefinitions=[
-            {
-                'AttributeName': 'key_id',
-                'AttributeType': 'S'
-            },
-
+            {"AttributeName": "key_id", "AttributeType": "S"},
         ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 1,
-            'WriteCapacityUnits': 1
-        }
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
     )
     key_bytes = os.urandom(32)
 
@@ -54,7 +44,7 @@ def test_key_generation():
     )
 
     key_store = DynamodbKeyStore(table=table, materials_provider=wrapped_cmp)
-    
+
     key_id = "key1"
     new_main_key = key_store.create_main_key(key_id)
     main_key = key_store.get_main_key(key_id)

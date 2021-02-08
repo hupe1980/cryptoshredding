@@ -18,7 +18,7 @@ class CryptoS3(object):
     def put_object(self, CSEKeyId: str, Bucket: str, Key: str, **kwargs):
         obj = CryptoObject(
             key_store=self._key_store,
-            object=boto3.resource('s3').Object(Bucket, Key),
+            object=boto3.resource("s3").Object(Bucket, Key),
         )
         return obj.put(CSEKeyId=CSEKeyId, **kwargs)
 

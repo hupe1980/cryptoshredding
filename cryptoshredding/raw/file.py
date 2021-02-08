@@ -9,7 +9,7 @@ class CryptoFile(object):
     def __init__(
         self,
         key_store: KeyStore,
-        commitment_policy: CommitmentPolicy = CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT
+        commitment_policy: CommitmentPolicy = CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT,
     ) -> None:
         self._key_store = key_store
         self._client = aws_encryption_sdk.EncryptionSDKClient(

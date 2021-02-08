@@ -22,22 +22,12 @@ def table(dynamodb):
     table = dynamodb.create_table(
         TableName="dummy",
         KeySchema=[
-            {
-                'AttributeName': 'id',
-                'KeyType': 'HASH'
-            },
+            {"AttributeName": "id", "KeyType": "HASH"},
         ],
         AttributeDefinitions=[
-            {
-                'AttributeName': 'id',
-                'AttributeType': 'S'
-            },
-
+            {"AttributeName": "id", "AttributeType": "S"},
         ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 1,
-            'WriteCapacityUnits': 1
-        }
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
     )
     return table
 
@@ -65,7 +55,7 @@ def test_get_item(table):
         default_action=CryptoAction.ENCRYPT_AND_SIGN,
         attribute_actions={
             "ignore": CryptoAction.DO_NOTHING,
-        }
+        },
     )
 
     crypto_table = CryptoTable(
@@ -114,7 +104,7 @@ def test_query(table):
         default_action=CryptoAction.ENCRYPT_AND_SIGN,
         attribute_actions={
             "ignore": CryptoAction.DO_NOTHING,
-        }
+        },
     )
 
     crypto_table = CryptoTable(
@@ -124,12 +114,8 @@ def test_query(table):
     )
     crypto_table.put_item(CSEKeyId=key_id, Item=plaintext_item)
 
-    encrypted_items = table.query(
-        KeyConditionExpression=Key("id").eq("foo")
-    )["Items"]
-    decrypted_items = crypto_table.query(
-        KeyConditionExpression=Key("id").eq("foo")
-    )["Items"]
+    encrypted_items = table.query(KeyConditionExpression=Key("id").eq("foo"))["Items"]
+    decrypted_items = crypto_table.query(KeyConditionExpression=Key("id").eq("foo"))["Items"]
 
     assert len(encrypted_items) == 1
     assert len(decrypted_items) == 1
@@ -144,12 +130,8 @@ def test_query(table):
     # shredding
     key_store.delete_main_key(key_id)
 
-    encrypted = table.query(
-        KeyConditionExpression=Key("id").eq("foo")
-    )
-    decrypted = crypto_table.query(
-        KeyConditionExpression=Key("id").eq("foo")
-    )
+    encrypted = table.query(KeyConditionExpression=Key("id").eq("foo"))
+    decrypted = crypto_table.query(KeyConditionExpression=Key("id").eq("foo"))
 
     assert encrypted["Count"] == 1
     assert len(encrypted["Items"]) == 1
@@ -181,7 +163,7 @@ def test_scan(table):
         default_action=CryptoAction.ENCRYPT_AND_SIGN,
         attribute_actions={
             "ignore": CryptoAction.DO_NOTHING,
-        }
+        },
     )
 
     crypto_table = CryptoTable(

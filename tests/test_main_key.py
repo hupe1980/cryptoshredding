@@ -28,5 +28,3 @@ def test_encrypt_decrypt(main_key):
 
     assert data_key != encrypted_data_key
     assert data_key == decrypted_data_key
-
-

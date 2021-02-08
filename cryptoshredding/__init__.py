@@ -6,10 +6,4 @@ from .main_key import MainKey
 
 __version__ = "0.0.3"
 
-__all__ = (
-    "DynamodbKeyStore",
-    "InMemoryKeyStore",
-    "KeyStore",
-    "MainKey",
-    "__version__"
-)
+__all__ = ("DynamodbKeyStore", "InMemoryKeyStore", "KeyStore", "MainKey", "__version__")

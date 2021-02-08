@@ -53,10 +53,7 @@ class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
             material_description=material_description,
         )
 
-    def encryption_materials(
-        self,
-        encryption_context: EncryptionContext
-    ) -> WrappedCryptographicMaterials:
+    def encryption_materials(self, encryption_context: EncryptionContext) -> WrappedCryptographicMaterials:
         """Provide encryption materials.
         :param EncryptionContext encryption_context: Encryption context for request
         :returns: Encryption materials
@@ -64,10 +61,7 @@ class KeyStoreMaterialsProvider(CryptographicMaterialsProvider):
         """
         return self._build_materials(encryption_context)
 
-    def decryption_materials(
-        self,
-        encryption_context: EncryptionContext
-    ) -> WrappedCryptographicMaterials:
+    def decryption_materials(self, encryption_context: EncryptionContext) -> WrappedCryptographicMaterials:
         """Provide decryption materials.
         :param EncryptionContext encryption_context: Encryption context for request
         :returns: Decryption materials

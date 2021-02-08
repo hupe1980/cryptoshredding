@@ -18,7 +18,7 @@ def key_store():
 @pytest.fixture
 def fs(request):
     """ Fake filesystem. """
-    if hasattr(request, 'param'):
+    if hasattr(request, "param"):
         # pass optional parameters via @pytest.mark.parametrize
         patcher = Patcher(*request.param)
     else:
@@ -37,11 +37,7 @@ def test_file(key_store, fs):
         key_store=key_store,
     )
 
-    crypto_file.encrypt(
-        key_id=key_id,
-        plaintext_filename="plain.txt",
-        ciphertext_filename="cipher.txt"
-    )
+    crypto_file.encrypt(key_id=key_id, plaintext_filename="plain.txt", ciphertext_filename="cipher.txt")
 
     crypto_file.decrypt(
         ciphertext_filename="cipher.txt",
@@ -54,9 +50,9 @@ def test_file(key_store, fs):
     with open("decrypt.txt", "r") as decrypted:
         decrypted_text = decrypted.read()
 
-    assert os.path.exists('plain.txt')
-    assert os.path.exists('cipher.txt')
-    assert os.path.exists('decrypt.txt')
+    assert os.path.exists("plain.txt")
+    assert os.path.exists("cipher.txt")
+    assert os.path.exists("decrypt.txt")
 
     assert text != encrypted_text
     assert text == decrypted_text

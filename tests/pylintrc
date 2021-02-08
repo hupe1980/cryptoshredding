@@ -1,0 +1,25 @@
+[MESSAGES CONTROL]
+# Disabling messages that we either don't care about for tests or are necessary to break for tests.
+disable =
+    invalid-name,  # we prefer long, descriptive, names for tests
+    missing-docstring,  # we don't write docstrings for tests
+    bad-continuation,  # we let black handle this
+    ungrouped-imports,  # we let isort handle this
+    no-member,  # raised on patched objects with mock checks
+    duplicate-code,  # unit tests for similar things tend to be similar
+    protected-access,  # raised when calling _ methods
+    redefined-outer-name,  # raised when using pytest-mock
+    unused-argument,  # raised when patches and fixtures are needed but not called
+    # All below are disabled because we need to support Python 2
+    useless-object-inheritance,
+    raise-missing-from,
+    super-with-arguments,
+
+[DESIGN]
+max-args = 10
+
+[FORMAT]
+max-line-length = 120
+
+[REPORTS]
+msg-template = {path}:{line}: [{msg_id}({symbol}), {obj}] {msg}

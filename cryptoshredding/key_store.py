@@ -43,11 +43,12 @@ class KeyStore(ABC):
         self._table_name = table_name
         self._key_bytes_generator = key_bytes_generator
         self._actions = AttributeActions(
-            default_action=CryptoAction.ENCRYPT_AND_SIGN, attribute_actions={
+            default_action=CryptoAction.ENCRYPT_AND_SIGN,
+            attribute_actions={
                 "restricted": CryptoAction.DO_NOTHING,
                 "on_hold": CryptoAction.DO_NOTHING,
                 "ttl": CryptoAction.DO_NOTHING,
-            }
+            },
         )
         self._actions.set_index_keys("key_id")
 
@@ -69,7 +70,7 @@ class KeyStore(ABC):
         crypto_config = CryptoConfig(
             materials_provider=self._materials_provider,
             encryption_context=encryption_context,
-            attribute_actions=self._actions
+            attribute_actions=self._actions,
         )
         encrypted_item = encrypt_python_item(plaintext_item, crypto_config)
 

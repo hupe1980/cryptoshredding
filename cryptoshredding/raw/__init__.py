@@ -1,10 +1,10 @@
+from .bytes import CryptoBytes
 from .file import CryptoFile
 from .key_provider import KeyStoreMasterKeyProvider
-from .string import CryptoString
 
 
 __all__ = (
+    "CryptoBytes",
     "CryptoFile",
     "KeyStoreMasterKeyProvider",
-    "CryptoString",
 )

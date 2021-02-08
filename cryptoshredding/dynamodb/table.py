@@ -15,13 +15,14 @@ from .materials_provider import KeyStoreMaterialsProvider
 
 class CryptoTable(object):
     """High-level helper class to provide a boto3 familiar interface to encrypted tables."""
+
     def __init__(
         self,
         table: ServiceResource,
         key_store: KeyStore,
         table_info: Optional[TableInfo] = None,
         attribute_actions: Optional[AttributeActions] = None,
-        auto_refresh_table_indexes: Optional[bool] = True
+        auto_refresh_table_indexes: Optional[bool] = True,
     ) -> None:
         if attribute_actions is None:
             attribute_actions = AttributeActions()
@@ -70,13 +71,19 @@ class CryptoTable(object):
         response = self._table.scan(**kwargs)
         return self._decrypt_dynamodb_response(response)
 
+    def update_item(self, **kwargs):
+        """Update item is not yet supported."""
+        raise NotImplementedError('"update_item" is not yet implemented')
+
     def _decrypt_dynamodb_response(self, response):
         ec_kwargs = self._table_info.encryption_context_values
         if self._table_info.primary_index is not None:
-            ec_kwargs.update({
-                "partition_key_name": self._table_info.primary_index.partition,
-                "sort_key_name": self._table_info.primary_index.sort
-            })
+            ec_kwargs.update(
+                {
+                    "partition_key_name": self._table_info.primary_index.partition,
+                    "sort_key_name": self._table_info.primary_index.sort,
+                }
+            )
 
         self._attribute_actions.set_index_keys(*self._table_info.protected_index_keys())
 

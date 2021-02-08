@@ -36,12 +36,7 @@ class KeyStoreMasterKeyProvider(MasterKeyProvider):
 
     def _new_master_key(self, key_id: bytes):
         main_key = self._key_store.get_main_key(codecs.decode(key_id, "utf8"))
-        return KeyStoreMasterKey(
-            config=KeyStoreMasterKeyConfig(
-                key_id=key_id,
-                main_key=main_key
-            )
-        )
+        return KeyStoreMasterKey(config=KeyStoreMasterKeyConfig(key_id=key_id, main_key=main_key))
 
 
 class KeyStoreMasterKeyConfig(MasterKeyConfig):

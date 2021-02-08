@@ -29,7 +29,7 @@ class CryptoObject(object):
 
         encrypted_body = AESGCM(data_key).encrypt(iv, Body.encode(), None)
 
-        metadata = kwargs.pop('Metadata', {})
+        metadata = kwargs.pop("Metadata", {})
         # Unencrypted content length.
         metadata["x-amz-unencrypted-content-length"] = content_length
         # Unencrypted content hash.
@@ -47,11 +47,7 @@ class CryptoObject(object):
         # CEK in key wrapped form.
         metadata["x-amz-key-v2"] = base64.b64encode(encrypted_data_key).decode()
 
-        return self._object.put(
-            Body=base64.b64encode(encrypted_body).decode(),
-            Metadata=metadata,
-            **kwargs
-        )
+        return self._object.put(Body=base64.b64encode(encrypted_body).decode(), Metadata=metadata, **kwargs)
 
     def get(self):
         obj = self._object.get()

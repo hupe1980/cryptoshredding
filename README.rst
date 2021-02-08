@@ -1,9 +1,22 @@
-
-===============
+###############
 CryptoShredding
-===============
+###############
+
+.. image:: https://img.shields.io/pypi/v/cryptoshredding.svg
+   :target: https://pypi.python.org/pypi/cryptoshredding
+   :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/pyversions/cryptoshredding.svg
+   :target: https://pypi.org/project/cryptoshredding
+   :alt: Supported Python Versions
+
+.. image:: https://github.com/hupe1980/cryptoshredding/workflows/ci/badge.svg
+   :target: https://github.com/hupe1980/cryptoshredding/actions?query=workflow%3Aci
+   :alt: ci
 
 Crypto shredding is the practice of 'deleting' data through the destruction of the cryptographic keys protecting the data.
+
+You can find the source on `GitHub`_.
 
 ***************
 Getting Started
@@ -156,23 +169,30 @@ File
     ...    plaintext_filename="decrypt.txt",
     ... )
 
-String
-======
+Bytes
+=====
 
 .. code-block:: python
 
-    >>> from cryptoshredding.raw import CryptoString
+    >>> from cryptoshredding.raw import CryptoBytes
     >>> 
-    >>> crypto_string = CryptoString(
+    >>> crypto_bytes = CryptoBytes(
     ...    key_store=key_store,
     ... )
-    >>> encrypted_text, encrypted_header = crypto_string.encrypt(
+    >>> encrypted, encrypted_header = crypto_bytes.encrypt(
     ...    key_id=key_id,
-    ...    source=plain_text,
+    ...    data=plain,
     ... )
-    >>> decrypted_text, decrypted_header = crypto_string.decrypt(
-    ...    source=encrypted_text,
+    >>> decrypted, decrypted_header = crypto_bytes.decrypt(
+    ...    data=encrypted,
     ... )
+
+Mongodb
+=======
+
+Sqlalchemy
+==========
 
 .. _cryptography: https://cryptography.io/en/latest/
 .. _cryptography installation guide: https://cryptography.io/en/latest/installation.html
+.. _GitHub: https://github.com/hupe1980/cryptoshredding/

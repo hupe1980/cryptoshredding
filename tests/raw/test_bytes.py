@@ -1,5 +1,5 @@
 import pytest
-from cryptoshredding.raw import CryptoString
+from cryptoshredding.raw import CryptoBytes
 from .. import create_in_memory_key_store
 
 
@@ -14,23 +14,23 @@ def key_store():
 
 
 def test_string(key_store):
-    source = "foo bar"
+    plain = b"foo bar"
 
-    crypto_string = CryptoString(
+    crypto_bytes = CryptoBytes(
         key_store=key_store,
     )
 
-    cypher_text, encrypted_header = crypto_string.encrypt(
+    encrypted, encrypted_header = crypto_bytes.encrypt(
         key_id=key_id,
-        source=source,
+        data=plain,
     )
 
-    plain_text, decrypted_header = crypto_string.decrypt(
-        source=cypher_text,
+    decrypted, decrypted_header = crypto_bytes.decrypt(
+        data=encrypted,
     )
 
-    assert cypher_text != source
-    assert plain_text == source
+    assert plain != encrypted
+    assert plain == decrypted
 
     assert all(
         pair in decrypted_header.encryption_context.items() for pair in encrypted_header.encryption_context.items()
