@@ -51,7 +51,11 @@ def test_get_object(kinesis):
     )
     shard_iterator = response["ShardIterator"]
 
-    response = crypto_kinesis.get_records(ShardIterator=shard_iterator)
+    encrypred_response = kinesis.get_records(ShardIterator=shard_iterator)
+    decrypred_response = crypto_kinesis.get_records(ShardIterator=shard_iterator)
 
-    assert len(response["Records"]) == 1
-    assert data == response["Records"][0]["Data"]
+    assert len(encrypred_response["Records"]) == 1
+    assert data != encrypred_response["Records"][0]["Data"]
+
+    assert len(decrypred_response["Records"]) == 1
+    assert data == decrypred_response["Records"][0]["Data"]

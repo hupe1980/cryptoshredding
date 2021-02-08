@@ -1,18 +1,41 @@
+from typing import Optional
 from boto3.resources.base import ServiceResource
+from dynamodb_encryption_sdk.structures import AttributeActions
+
+from ..key_store import KeyStore
+from .cache import TableInfoCache
+from .table import CryptoTable
 
 
 class CryptoResource(object):
     def __init__(
         self,
         resource: ServiceResource,
-        key_store,
-        attribute_actions=None,
-        auto_refresh_table_indexes=True,
+        key_store: KeyStore,
+        attribute_actions: Optional[AttributeActions] = None,
+        auto_refresh_table_indexes: bool = True,
     ) -> None:
-        pass
+        if attribute_actions is None:
+            attribute_actions = AttributeActions()
 
-    def Table(self, name, **kwargs):
-        pass
+        self._resource = resource
+        self._key_store = key_store
+        self._attribute_actions = attribute_actions
+        self._auto_refresh_table_indexes = auto_refresh_table_indexes
+        self._table_info_cache = TableInfoCache(
+            client=self._resource.meta.client,
+            auto_refresh_table_indexes=self._auto_refresh_table_indexes,
+        )
+
+    def Table(self, name: str, **kwargs) -> CryptoTable:
+        """Creates an CryptoTable resource."""
+        return CryptoTable(
+            table=self._resource.Table(name),
+            key_store=self._key_store,
+            attribute_actions=kwargs.get("attribute_actions", self._attribute_actions),
+            auto_refresh_table_indexes=kwargs.get("auto_refresh_table_indexes", self._auto_refresh_table_indexes),
+            table_info=self._table_info_cache.table_info(name),
+        )
 
     def __getattr__(self, name):
         """Catch any method/attribute lookups that are not defined in this class and try

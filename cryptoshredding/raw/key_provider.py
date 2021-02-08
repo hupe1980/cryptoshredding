@@ -19,6 +19,7 @@ _PROVIDER_ID = "key_store"
 
 
 class KeyStoreMasterKeyProviderConfig(MasterKeyProviderConfig):
+    # pylint: disable=too-few-public-methods
     def __init__(self, **kwargs):
         self._key_store = kwargs.get("key_store")
 
@@ -40,6 +41,7 @@ class KeyStoreMasterKeyProvider(MasterKeyProvider):
 
 
 class KeyStoreMasterKeyConfig(MasterKeyConfig):
+    # pylint: disable=too-few-public-methods
     provider_id = _PROVIDER_ID
 
     def __init__(self, **kwargs):

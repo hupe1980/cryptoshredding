@@ -27,7 +27,7 @@ setup(
     version=get_version(),
     description="Crypto shredding for Python",
     long_description=open("README.rst").read(),
-    keywords="cryptoshredding gdpr aws kms client-side-encryption dynamodb s3",
+    keywords="cryptoshredding gdpr aws kms client-side-encryption dynamodb s3 kinesis",
     author="hupe1980",
     url="https://github.com/hupe1980/cryptoshredding",
     packages=find_packages(exclude=["tests*"]),

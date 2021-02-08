@@ -1,16 +1,27 @@
-import botocore
+from typing import Optional
+from botocore.client import BaseClient
+from dynamodb_encryption_sdk.structures import AttributeActions
+
+from ..key_store import KeyStore
 
 
 class CryptoClient(object):
     def __init__(
         self,
-        client: botocore.client.BaseClient,
-        key_store,
-        attribute_actions=None,
-        auto_refresh_table_indexes=True,
-        expect_standard_dictionaries=False,
+        client: BaseClient,
+        key_store: KeyStore,
+        attribute_actions: Optional[AttributeActions] = None,
+        auto_refresh_table_indexes: bool = True,
+        expect_standard_dictionaries: bool = False,
     ) -> None:
-        pass
+        if attribute_actions is None:
+            attribute_actions = AttributeActions()
+
+        self._client = client
+        self._key_store = key_store
+        self._attribute_actions = attribute_actions
+        self._auto_refresh_table_indexes = auto_refresh_table_indexes
+        self._expect_standard_dictionaries = expect_standard_dictionaries
 
     def update_item(self, **kwargs):
         """Update item is not yet supported.
