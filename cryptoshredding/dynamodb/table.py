@@ -102,7 +102,7 @@ class CryptoTable(object):
                 except Exception:  # TODO
                     pass
 
-        response["Items"] = list(decrypt(items=response["Items"]))
+        response["Items"] = list(decrypt(response["Items"]))
         response["Count"] = len(response["Items"])
 
         return response

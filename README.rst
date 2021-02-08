@@ -187,6 +187,9 @@ Bytes
     ...    data=encrypted,
     ... )
 
+Kinesis
+=======
+
 Mongodb
 =======
 

@@ -52,9 +52,12 @@ class KeyStore(ABC):
         )
         self._actions.set_index_keys("key_id")
 
-    def create_main_key(self, key_id: str) -> MainKey:
+    def create_main_key(self, key_id: str, key_bytes=None) -> MainKey:
         index_key = {"key_id": key_id}
-        key_bytes = self._key_bytes_generator()
+
+        if key_bytes is None:
+            key_bytes = self._key_bytes_generator()
+
         plaintext_item = {
             "restricted": False,
             "on_hold": False,

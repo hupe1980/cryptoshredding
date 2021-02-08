@@ -4,4 +4,5 @@
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.pythonPath": ".tox/dev/bin/python",
+    "python.formatting.provider": "black",
 }
