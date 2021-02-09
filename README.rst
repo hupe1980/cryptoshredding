@@ -59,11 +59,12 @@ KeyStore
     table = boto3.resource("dynamodb").Table("key_store_table") 
     key_store = DynamodbKeyStore(table=table, materials_provider=aws_kms_cmp)
     
-    key_store.create_main_key("foo")
+    key_id = "key4711"
+    key_store.create_main_key(key_id)
     
-    main_key = key_store.get_main_key("foo")
+    main_key = key_store.get_main_key(key_id)
     
-    key_store.delete_main_key("foo")  # shredding
+    key_store.delete_main_key(key_id)  # shredding
 
 MainKey
 =======
@@ -73,7 +74,7 @@ MainKey
     import boto3
     from cryptoshredding import MainKey
 
-    main_key = key_store.get_main_key("foo")
+    main_key = key_store.get_main_key(key_id)
     data_key, encrypted_data_key = main_key.generate_data_key()
 
     decrypted_data_key = main_key.decrypt(encrypted_data_key)
@@ -87,15 +88,18 @@ Dynamodb
 
     import boto3
     from cryptoshredding.dynamodb import CryptoTable
+    
     table = boto3.resource("dynamodb").Table("data_table") 
     crypto_table = CryptoTable(
        table=table,
        key_store=key_store,
     )
+    
     crypto_table.put_item(
        CSEKeyId=key_id,
        Item=plaintext_item
     )
+    
     index_key = {"id": "foo"}
     encrypted_item = table.get_item(Key=index_key)["Item"]
     decrypted_item = crypto_table.get_item(Key=index_key)["Item"]
@@ -105,6 +109,7 @@ Dynamodb
 
     assert len(encrypted_items) == 1
     assert len(decrypted_items) == 1
+    
     key_store.delete_main_key(key_id)  # shredding
 
     encrypted_items = table.scan()["Items"]
@@ -126,16 +131,19 @@ S3
        client=s3,
        key_store=key_store,
     )
+    
     crypto_s3.put_object(
        CSEKeyId=key_id,
        Bucket=bucket.name,
        Key="object",
        Body="foo bar"",
     )
+    
     encrypted_obj = s3.get_object(
        Bucket=bucket.name,
        Key="object",
     )
+    
     decrypted_obj = crypto_s3.get_object(
        Bucket=bucket.name,
        Key="object",
@@ -151,11 +159,13 @@ File
     crypto_file = CryptoFile(
        key_store=key_store,
     )
+    
     crypto_file.encrypt(
        key_id=key_id,
        plaintext_filename="plain.txt",
        ciphertext_filename="cipher.txt"
     )
+    
     crypto_file.decrypt(
        ciphertext_filename="cipher.txt",
        plaintext_filename="decrypt.txt",
@@ -171,10 +181,12 @@ Bytes
     crypto_bytes = CryptoBytes(
        key_store=key_store,
     )
+    
     encrypted, encrypted_header = crypto_bytes.encrypt(
        key_id=key_id,
        data=plain,
     )
+    
     decrypted, decrypted_header = crypto_bytes.decrypt(
        data=encrypted,
     )
