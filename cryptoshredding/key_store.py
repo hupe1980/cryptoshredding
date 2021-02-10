@@ -16,8 +16,8 @@ from dynamodb_encryption_sdk.transform import dict_to_ddb
 from .main_key import MainKey
 
 
-def key_bytes_generator() -> bytes:
-    return os.urandom(32)
+def key_bytes_generator(key_length: int) -> bytes:
+    return os.urandom(key_length // 8)
 
 
 class KeyStore(ABC):
@@ -52,11 +52,11 @@ class KeyStore(ABC):
         )
         self._actions.set_index_keys("key_id")
 
-    def create_main_key(self, key_id: str, key_bytes=None) -> MainKey:
+    def create_main_key(self, key_id: str, key_length=256, key_bytes=None) -> MainKey:
         index_key = {"key_id": key_id}
 
         if key_bytes is None:
-            key_bytes = self._key_bytes_generator()
+            key_bytes = self._key_bytes_generator(key_length)
 
         plaintext_item = {
             "restricted": False,

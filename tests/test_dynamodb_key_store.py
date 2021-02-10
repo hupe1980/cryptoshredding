@@ -11,18 +11,15 @@ from cryptoshredding import DynamodbKeyStore
 
 @mock_dynamodb2
 def test_key_generation():
-    dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
+    table_name = "key_store"
 
-    table = dynamodb.create_table(
-        TableName="dummy_table",
-        KeySchema=[
-            {"AttributeName": "key_id", "KeyType": "HASH"},
-        ],
-        AttributeDefinitions=[
-            {"AttributeName": "key_id", "AttributeType": "S"},
-        ],
-        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+    DynamodbKeyStore.create_table(
+        client=boto3.client("dynamodb", region_name="us-east-1"),
+        table_name=table_name,
     )
+
+    table = boto3.resource("dynamodb", region_name="us-east-1").Table(table_name)
+
     key_bytes = os.urandom(32)
 
     wrapping_key = JceNameLocalDelegatedKey(
